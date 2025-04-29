@@ -1,10 +1,9 @@
 services:
+
   - type: web
     name: gymtracker-database
     env: docker
     plan: free
-    dockerfilePath: ""
-    dockerContext: .
     image: mysql:8.0
     envVars:
       - key: MYSQL_ROOT_PASSWORD
