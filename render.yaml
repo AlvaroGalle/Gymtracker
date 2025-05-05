@@ -6,11 +6,11 @@
 # Define multi-service architecture: MySQL, API, and App
 services:
   - name: database
-    type: pserv              # servicio privado, sólo red interna
+    type: web              # servicio privado, sólo red interna
     runtime: docker          # indicamos que Render debe construir la imagen
     branch: main             # rama del repo donde están Dockerfile.db e init.sql
     dockerfilePath: Dockerfile.db
-    plan: starter
+    plan: free
     autoDeploy: true
     envVars:
       - key: MYSQL_ROOT_PASSWORD
@@ -32,7 +32,7 @@ services:
     runtime: docker            # build from Dockerfile
     branch: main
     dockerfilePath: Dockerfile.api
-    plan: starter
+    plan: free
     autoDeploy: true
     envVars:    
       - key: PORT
@@ -44,7 +44,7 @@ services:
     runtime: docker
     branch: main
     dockerfilePath: Dockerfile.app
-    plan: starter
+    plan: free
     autoDeploy: true
     envVars:
     - key: PORT
