@@ -61,9 +61,6 @@ services:
       value: "443"
     # Use health checks and specify path if needed:
     healthCheckPath: /
-    ports:
-      - internalPort: 443
-        protocol: http
 
 # No explicit networks needed: services share private network by default
 # Volumes from docker-compose are not supported; persistent storage is ephemeral
