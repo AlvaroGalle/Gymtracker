@@ -1,0 +1,70 @@
+#################################################################
+# Render Blueprint for Docker-Compose stack                           #
+# Generated from your docker-compose.yml                           #
+#################################################################
+
+# Define multi-service architecture: MySQL, API, and App
+services:
+  - name: database
+    type: pserv              # servicio privado, sólo red interna
+    runtime: docker          # indicamos que Render debe construir la imagen
+    branch: main             # rama del repo donde están Dockerfile.db e init.sql
+    dockerfilePath: Dockerfile.db
+    plan: starter
+    autoDeploy: true
+    envVars:
+      - key: MYSQL_ROOT_PASSWORD
+        value: root_password
+      - key: MYSQL_DATABASE
+        value: gymtracker
+      - key: MYSQL_USER
+        value: dad
+      - key: MYSQL_PASSWORD
+        value: padre
+    # Note: Render does not support Docker volumes or host mounts.
+    # To initialize with init.sql, bake it into a custom image via a Dockerfile:
+    #   FROM mysql:8.0
+    #   COPY init.sql /docker-entrypoint-initdb.d/
+
+  # 2) API service
+  - name: api
+    type: web                  # HTTP service
+    runtime: docker            # build from Dockerfile
+    branch: main
+    dockerfilePath: Dockerfile.api
+    plan: starter
+    autoDeploy: true
+    ports:
+      - internalPort: 8081
+        protocol: http
+
+  # 3) App service (Spring Boot)
+  - name: app
+    type: web                  # HTTPS service
+    runtime: docker
+    branch: main
+    dockerfilePath: Dockerfile.app
+    plan: starter
+    autoDeploy: true
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mysql://database:3306/gymtracker
+      - key: SPRING_DATASOURCE_USERNAME
+        value: dad
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: padre
+      - key: SERVER_PORT
+        value: "443"
+    # Use health checks and specify path if needed:
+    healthCheckPath: /
+    ports:
+      - internalPort: 443
+        protocol: http
+
+# No explicit networks needed: services share private network by default
+# Volumes from docker-compose are not supported; persistent storage is ephemeral
+
+# To deploy:
+# 1. Commit this render.yaml to your repo root alongside Dockerfiles.
+# 2. In Render Dashboard, choose "New → Blueprint" and select your repo.
+# 3. Render will provision all services with zero-downtime deploys.
