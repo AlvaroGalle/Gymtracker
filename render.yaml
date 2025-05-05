@@ -68,4 +68,4 @@ services:
 # To deploy:
 # 1. Commit this render.yaml to your repo root alongside Dockerfiles.
 # 2. In Render Dashboard, choose "New → Blueprint" and select your repo.
-# 3. Render will provision all services with zero-downtime deploys.
+# 3. Render will provision all services with zero-downtime deploys..
