@@ -34,9 +34,9 @@ services:
     dockerfilePath: Dockerfile.api
     plan: starter
     autoDeploy: true
-    ports:
-      - internalPort: 8081
-        protocol: http
+    envVars:    
+      - key: PORT
+        value: "8081"
 
   # 3) App service (Spring Boot)
   - name: app
@@ -47,14 +47,18 @@ services:
     plan: starter
     autoDeploy: true
     envVars:
-      - key: SPRING_DATASOURCE_URL
-        value: jdbc:mysql://database:3306/gymtracker
-      - key: SPRING_DATASOURCE_USERNAME
-        value: dad
-      - key: SPRING_DATASOURCE_PASSWORD
-        value: padre
-      - key: SERVER_PORT
-        value: "443"
+    - key: PORT
+      value: "443"
+    - key: SPRING_DATASOURCE_URL
+      value: jdbc:mysql://database:3306/gymtracker
+    - key: SPRING_DATASOURCE_URL
+      value: jdbc:mysql://database:3306/gymtracker
+    - key: SPRING_DATASOURCE_USERNAME
+      value: dad
+    - key: SPRING_DATASOURCE_PASSWORD
+      value: padre
+    - key: SERVER_PORT
+      value: "443"
     # Use health checks and specify path if needed:
     healthCheckPath: /
     ports:
